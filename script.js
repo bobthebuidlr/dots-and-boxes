@@ -93,7 +93,8 @@ function tileClicked(event) {
 function playAgent() {
   if (game.getPossibleMoves().length === 0) return;
   setTimeout(() => {
-    const move = game.minimaxRoot(difficulty);
+    const moves = game.minimaxRoot(difficulty);
+    const move = moves[Math.floor(Math.random()*moves.length)]
     game.playMove(move, true);
     if (game.currentPlayer === 1) {
       playAgent();
@@ -484,7 +485,8 @@ class Game {
     const moves = this.getPossibleMoves();
     let bestMove = 0;
     this.currentPlayer === 1 ? (bestMove = -999) : (bestMove = 999);
-    let bestMoveFound = null;
+    let bestMovesFound = [];
+    let movesAndValues = []
 
     moves.forEach(move => {
       // Save the current game state by copying the variables into placeholders
@@ -511,19 +513,20 @@ class Game {
       this.currentPlayerColor = currentPlayerColor;
       this.board = board;
 
+      movesAndValues.push({move, value})
+
       if (value >= bestMove) {
         bestMove = value;
-        bestMoveFound = move;
+        bestMovesFound = [move]
       }
-      // if (this.currentPlayer === -1 && value <= bestMove) {
-      //   bestMove = value;
-      //   bestMoveFound = move;
-      // } else if (this.currentPlayer === 1 && value >= bestMove) {
-      //   bestMove = value;
-      //   bestMoveFound = move;
-      // }
     });
-    return bestMoveFound;
+
+    for (let pair of movesAndValues) {
+      if (pair.value === bestMove) {
+        bestMovesFound.push(pair.move)
+      }
+    }
+    return bestMovesFound;
   }
 }
 
