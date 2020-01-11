@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="container">
+        <div class="game-settings">
+          <div>
+            <label for="difficulty">Difficulty</label>
+            <select name="difficulty" id="difficulty">
+              <option value="1">Intermediate</option>
+              <option value="2">Hard</option>
+              <option value="3">Expert</option>
+              <option value="4">A.I.</option>
+            </select>
+          </div>
+          <div>
+              <button id="add-col">Add column</button>
+              <button id="remove-col">Remove column</button>
+              <button id="add-row">Add row</button>
+              <button id="remove-row">Remove row</button>
+          </div>
+        </div>
+        <div id="playfieldContainer">
+          <table id="playfield" class=""></table>
+        </div>
+
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
