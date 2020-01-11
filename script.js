@@ -2,8 +2,9 @@ document.getElementById('add-col').addEventListener('click', addCol);
 document.getElementById('remove-col').addEventListener('click', removeCol);
 document.getElementById('add-row').addEventListener('click', addRow);
 document.getElementById('remove-row').addEventListener('click', removeRow);
-document.getElementById('difficulty').addEventListener('change', changeDifficulty);
-
+document
+  .getElementById('difficulty')
+  .addEventListener('change', changeDifficulty);
 
 let playfield = document.getElementById('playfield');
 
@@ -13,9 +14,6 @@ let colCount = 3;
 let rowCount = 3;
 let difficulty = 3;
 
-/**
- *** BOARD DRAWING AND ADJUSTMENT FUNCTIONS
- **/
 function addCol() {
   if (colCount === 6) {
     return;
@@ -63,10 +61,10 @@ function drawPlayfield() {
     row.id = i;
 
     for (let j = 0; j < colCount; j++) {
-      const indices = Object.values(getBorderIndices(i, j))
+      const indices = Object.values(getBorderIndices(i, j));
       const col = document.createElement('td');
       for (index in indices) {
-        col.classList.add(indices[index])
+        col.classList.add(indices[index]);
       }
       col.id = j;
       col.addEventListener('click', tileClicked);
@@ -88,29 +86,20 @@ function tileClicked(event) {
   if (game.getPossibleMoves().length === 0) return;
   game.tileClicked(event.currentTarget);
   if (game.currentPlayer === 1) {
-    playAgent()
+    playAgent();
   }
 }
 
 function playAgent() {
   if (game.getPossibleMoves().length === 0) return;
   setTimeout(() => {
-    console.log('GAME STATE BEFORE AGENT: ', game.board)
     const move = game.minimaxRoot(difficulty);
-    game.colorBorders(move);
-    game.playMove(move);
-    console.log('GAME STATE AFTER AGENT: ', game.board)
-    console.log(move)
-    console.log(game.currentPlayer)
+    game.playMove(move, true);
     if (game.currentPlayer === 1) {
-      playAgent()
+      playAgent();
     }
-  }, 500)
+  }, 500);
 }
-
-/**
- *** BOARD INDEXING FUNCTIONS
- **/
 
 function getBorderIndices(row, col) {
   let indices = {};
@@ -123,10 +112,6 @@ function getBorderIndices(row, col) {
   return indices;
 }
 
-/**
- *** GAME CLASS
- **/
-
 class Game {
   rows = 0;
   cols = 0;
@@ -136,7 +121,6 @@ class Game {
   excludeBottom = [];
   excludeLeft = [];
   excludeRight = [];
-  borderDirections = [];
 
   currentPlayer = -1;
   currentPlayerColor = 'blue';
@@ -149,10 +133,7 @@ class Game {
     (this.rows = rows),
       (this.cols = cols),
       (this.board = this.initBoard()),
-      (this.borderDirections = this.initBoard()),
-      this.createIndices(),
-      this.getExcludedPositions(),
-      this.defineBorderDirections();
+      this.createIndices()
   }
 
   initBoard() {
@@ -166,105 +147,6 @@ class Game {
     for (let i = 0; i < this.board.length; i++) {
       this.indices.push(i);
     }
-  }
-
-
-  getExcludedPositions() {
-    this.excludeTop = this.indices.slice(0, this.cols);
-    this.excludeBottom = this.indices.slice(this.indices.length - this.cols);
-    for (
-      let i = this.cols;
-      i < this.indices.length;
-      i = i + this.cols * 2 + 1
-    ) {
-      this.excludeLeft.push(i);
-    }
-    for (
-      let i = this.cols * 2;
-      i < this.indices.length;
-      i = i + this.cols * 2 + 1
-    ) {
-      this.excludeRight.push(i);
-    }
-  }
-
-  defineBorderDirections() {
-    for (let i = 0; i < this.borderDirections.length; i++) {
-      this.borderDirections[i] = 1;
-      if ((i - 2) % (this.cols * 2 + 1) === 0) {
-        i = i + this.cols + 1;
-      }
-    }
-  }
-
-  checkHorizontalTiles(border) {
-    let horizontalTiles = {};
-
-    if (this.excludeLeft.includes(border)) {
-      horizontalTiles.right = [
-        border,
-        border - this.cols,
-        border + 1,
-        border + 1 + this.cols
-      ];
-    } else if (this.excludeRight.includes(border)) {
-      horizontalTiles.left = [
-        border,
-        border + this.cols,
-        border - 1,
-        border - 1 - this.cols
-      ];
-    } else {
-      horizontalTiles.right = [
-        border,
-        border - this.cols,
-        border + 1,
-        border + 1 + this.cols
-      ];
-      horizontalTiles.left = [
-        border,
-        border + this.cols,
-        border - 1,
-        border - 1 - this.cols
-      ];
-    }
-    return horizontalTiles;
-  }
-
-  checkVerticalTiles(border) {
-    let verticalTiles = {};
-
-    console.log('vertical tiles',document.getElementsByClassName(border))
-
-    if (this.excludeTop.includes(border)) {
-      verticalTiles.bottom = [
-        border,
-        border + this.cols,
-        border + this.cols + 1,
-        border + this.cols * 2 + 1
-      ];
-    } else if (this.excludeBottom.includes(border)) {
-      verticalTiles.top = [
-        border,
-        border - this.cols,
-        border - this.cols - 1,
-        border - this.cols * 2 - 1
-      ];
-    } else {
-      verticalTiles.top = [
-        border,
-        border - this.cols,
-        border - this.cols - 1,
-        border - this.cols * 2 - 1
-      ];
-      verticalTiles.bottom = [
-        border,
-        border + this.cols,
-        border + this.cols + 1,
-        border + this.cols * 2 + 1
-      ];
-    }
-    return verticalTiles;
   }
 
   getPossibleMoves() {
@@ -304,11 +186,11 @@ class Game {
   }
 
   evaluateBoardState() {
-    let score = this.playerScores[1] - this.playerScores[-1]
+    let score = this.playerScores[1] - this.playerScores[-1];
     if (score < 0) {
-      score = score ** 2 * -1
+      score = score ** 2 * -1;
     } else {
-      score = score ** 2
+      score = score ** 2;
     }
     return score;
   }
@@ -427,7 +309,7 @@ class Game {
           tileTaken = true;
         }
       }
-    };
+    }
 
     const totalBordersTaken = event.currentTarget.classList.length;
     if (totalBordersTaken === 8) {
@@ -446,127 +328,67 @@ class Game {
     }
   }
 
-  // TODO: simplify
   colorBorders(move) {
-    const tiles = document.getElementsByTagName('td');
+    let tiles = document.getElementsByClassName(move);
+
     for (let tile of tiles) {
-      const indices = tile.classList
-      if (indices.contains(move)) {
-        for (let i = 0; i < indices.length; i++) {
-          if (indices[i] == move) {
-            switch(i) {
-              case 0:
-                tile.classList.add(`${this.currentPlayerColor}-top`);
-                if (tile.classList.length === 8) {
-                  tile.classList.add(`${this.currentPlayerColor}`)
-                }
-                break;
-              case 1:
-                tile.classList.add(`${this.currentPlayerColor}-left`);
-                if (tile.classList.length === 8) {
-                  tile.classList.add(`${this.currentPlayerColor}`)
-                }
-                break;
-              case 2:
-                tile.classList.add(`${this.currentPlayerColor}-right`);
-                if (tile.classList.length === 8) {
-                  tile.classList.add(`${this.currentPlayerColor}`)
-                }
-                break;
-              case 3:
-                tile.classList.add(`${this.currentPlayerColor}-bottom`);
-                if (tile.classList.length === 8) {
-                  tile.classList.add(`${this.currentPlayerColor}`)
-                }
-                break;
-              default:
-                break
-            }
+      for (let i = 0; i < 4; i++) {
+        if (tile.classList.item(i) == move) {
+          switch (i) {
+            case 0:
+              tile.classList.add(`${this.currentPlayerColor}-top`);
+              if (tile.classList.length === 8) {
+                tile.classList.add(`${this.currentPlayerColor}`);
+              }
+              break;
+            case 1:
+              tile.classList.add(`${this.currentPlayerColor}-left`);
+              if (tile.classList.length === 8) {
+                tile.classList.add(`${this.currentPlayerColor}`);
+              }
+              break;
+            case 2:
+              tile.classList.add(`${this.currentPlayerColor}-right`);
+              if (tile.classList.length === 8) {
+                tile.classList.add(`${this.currentPlayerColor}`);
+              }
+              break;
+            case 3:
+              tile.classList.add(`${this.currentPlayerColor}-bottom`);
+              if (tile.classList.length === 8) {
+                tile.classList.add(`${this.currentPlayerColor}`);
+              }
+              break;
+            default:
+              break;
           }
         }
       }
     }
   }
 
-  playMove(move) {
+  playMove(move, color) {
+    if (color) this.colorBorders(move);
+
     this.board[move] = this.currentPlayer;
+    let tiles = document.getElementsByClassName(move);
+    let tileCaptured = false;
 
-    const direction = this.borderDirections[move];
-
-    // The border is horizontal, so check vertically aligned tiles
-    if (direction === 1) {
-      const top = this.checkVerticalTiles(move).top;
-      const bottom = this.checkVerticalTiles(move).bottom;
-      let availableTopBorders = 4;
-      let availableBottomBorders = 4;
-
-      // Check all the borders of the top cell
-      if (top) {
-        top.forEach(border => {
-          if (this.board[border] !== 0) {
-            availableTopBorders -= 1;
-          }
-        });
+    for (let tile of tiles) {
+      let availableBorders = 4
+      for (let i = 0; i < 4; i++) {
+        const index = tile.classList.item(i);
+        if (this.board[index] !== 0) {
+          availableBorders -= 1;
+        }
       }
-
-      // Check all the borders of the bottom cell
-      if (bottom) {
-        bottom.forEach(border => {
-          if (this.board[border] !== 0) {
-            availableBottomBorders -= 1;
-          }
-        });
+      if (availableBorders === 0) {
+        this.playerScores[this.currentPlayer] += 1;
+        tileCaptured = true;
       }
-
-      // If any of the tiles is captured, add a score to the player
-      availableTopBorders === 0
-        ? (this.playerScores[this.currentPlayer] += 1)
-        : null;
-      availableBottomBorders === 0
-        ? (this.playerScores[this.currentPlayer] += 1)
-        : null;
-      if (availableBottomBorders === 0 || availableTopBorders === 0) return;
-
-      // If no tiles were captured, change player
-      this.changePlayer();
-    } else {
-      // The border is vertical, so check horizontal tiles
-
-      const right = this.checkHorizontalTiles(move).right;
-      const left = this.checkHorizontalTiles(move).left;
-      let availableRightBorders = 4;
-      let availableLeftBorders = 4;
-
-      // Check all the borders of the right cell
-      if (right) {
-        right.forEach(border => {
-          if (this.board[border] !== 0) {
-            availableRightBorders -= 1;
-          }
-        });
-      }
-
-      // Check all the borders of the left cell
-      if (left) {
-        left.forEach(border => {
-          if (this.board[border] !== 0) {
-            availableLeftBorders -= 1;
-          }
-        });
-      }
-
-      // If any of the tiles is captured, add a score to the player
-      availableRightBorders === 0
-        ? (this.playerScores[this.currentPlayer] += 1)
-        : null;
-      availableLeftBorders === 0
-        ? (this.playerScores[this.currentPlayer] += 1)
-        : null;
-      if (availableRightBorders === 0 || availableLeftBorders === 0) return;
-
-      // If no tiles were captured, change player
-      this.changePlayer();
     }
+
+    if (!tileCaptured) this.changePlayer();
   }
 
   minimax(depth, alpha, beta, player) {
@@ -584,12 +406,14 @@ class Game {
         // Save the current game state
         const playerScores = JSON.parse(JSON.stringify(this.playerScores));
         const currentPlayer = JSON.parse(JSON.stringify(this.currentPlayer));
-        const currentPlayerColor = JSON.parse(JSON.stringify(this.currentPlayerColor));
+        const currentPlayerColor = JSON.parse(
+          JSON.stringify(this.currentPlayerColor)
+        );
         const board = JSON.parse(JSON.stringify(this.board));
 
-        this.playMove(moves[i]);
+        this.playMove(moves[i], false);
 
-        let value = 0
+        let value = 0;
 
         // Check who's turn it is after the played move
         if (this.currentPlayer === 1) {
@@ -622,12 +446,14 @@ class Game {
         // Save the current game state
         const playerScores = JSON.parse(JSON.stringify(this.playerScores));
         const currentPlayer = JSON.parse(JSON.stringify(this.currentPlayer));
-        const currentPlayerColor = JSON.parse(JSON.stringify(this.currentPlayerColor));
+        const currentPlayerColor = JSON.parse(
+          JSON.stringify(this.currentPlayerColor)
+        );
         const board = JSON.parse(JSON.stringify(this.board));
 
-        this.playMove(moves[i]);
+        this.playMove(moves[i], false);
 
-        let value = 0
+        let value = 0;
 
         // Check who's turn it is after the played move
         if (this.currentPlayer === 1) {
@@ -654,21 +480,23 @@ class Game {
     }
   }
 
-  minimaxRoot(depth, player) {
+  minimaxRoot(depth) {
     const moves = this.getPossibleMoves();
     let bestMove = 0;
-    this.currentPlayer === 1 ? bestMove = -999 : bestMove = 999;
+    this.currentPlayer === 1 ? (bestMove = -999) : (bestMove = 999);
     let bestMoveFound = null;
 
     moves.forEach(move => {
       // Save the current game state by copying the variables into placeholders
       const playerScores = JSON.parse(JSON.stringify(this.playerScores));
       const currentPlayer = JSON.parse(JSON.stringify(this.currentPlayer));
-      const currentPlayerColor = JSON.parse(JSON.stringify(this.currentPlayerColor));
+      const currentPlayerColor = JSON.parse(
+        JSON.stringify(this.currentPlayerColor)
+      );
       const board = JSON.parse(JSON.stringify(this.board));
       let value = 0;
 
-      this.playMove(move);
+      this.playMove(move, false);
 
       // Check who's turn it is after the played move
       if (this.currentPlayer == 1) {
@@ -684,8 +512,8 @@ class Game {
       this.board = board;
 
       if (value >= bestMove) {
-        bestMove = value
-        bestMoveFound = move
+        bestMove = value;
+        bestMoveFound = move;
       }
       // if (this.currentPlayer === -1 && value <= bestMove) {
       //   bestMove = value;
