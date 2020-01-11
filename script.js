@@ -84,7 +84,7 @@ function changeDifficulty(event) {
 }
 
 function tileClicked(event) {
-  if (game.getPossibleMoves().length === 0) return;
+  if (game.getPossibleMoves().length === 0 || game.currentPlayer === 1) return;
   game.tileClicked(event.currentTarget);
   if (game.currentPlayer === 1) {
     playAgent();
