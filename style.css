@@ -1,3 +1,8 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
 .wrapper {
     width: 100vw;
     height: 100vh;
@@ -6,10 +11,33 @@
     align-items: flex-start;
 }
 
+.background-image {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: gray;
+    opacity: 0.5;
+    z-index: -1;
+}
+
 .game-settings {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.game-settings--difficulty {
+    margin: 16px;
+}
+
+.settings-button {
+    height: 32px;
+    border-radius: 5px;
+    margin: 6px 0;
+}
+
+.settings-button:active {
+    background-color: gray;
 }
 
 #playfield {
@@ -18,57 +46,57 @@
 }
 
 tr:first-child td {
-    border-top: 20px solid #0000005c;
+    border-top: 20px solid #707070;
 }
 
 tr:last-child td {
-    border-bottom: 20px solid #0000005c;
+    border-bottom: 20px solid #707070;
 }
 
 td {
-    border: 10px solid #0000005c;
+    border: 10px solid #707070;
     width: 50px;
     height: 50px;
 }
 
 td:first-child {
-    border-left: 20px solid #0000005c;
+    border-left: 20px solid #707070;
 }
 
 td:last-child {
-    border-right: 20px solid #0000005c;
+    border-right: 20px solid #707070;
 }
 
 .red {
-    background-color: rgba(255, 0, 0, 0.479) !important;
+    background-color: #a13e43a1 !important;
 }
 
 .red-top {
-    border-top-color: #a51717 !important;
+    border-top-color: #93060e !important;
 }
 .red-right {
-    border-right-color: #a51717 !important;
+    border-right-color: #93060e !important;
 }
 .red-bottom {
-    border-bottom-color: #a51717 !important;
+    border-bottom-color: #93060e !important;
 }
 .red-left {
-    border-left-color: #a51717 !important;
+    border-left-color: #93060e !important;
 }
 
 .blue-top {
-    border-top-color: #1818a9 !important;
+    border-top-color: #171565 !important;
 }
 .blue-right {
-    border-right-color: #1818a9 !important;
+    border-right-color: #171565 !important;
 }
 .blue-bottom {
-    border-bottom-color: #1818a9 !important;
+    border-bottom-color: #171565 !important;
 }
 .blue-left {
-    border-left-color: #1818a9 !important;
+    border-left-color: #171565 !important;
 }
 
 .blue {
-    background-color: rgba(0, 0, 255, 0.486) !important;
+    background-color: #171565a3 !important;
 }

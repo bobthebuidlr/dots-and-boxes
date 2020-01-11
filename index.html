@@ -9,9 +9,10 @@
   </head>
   <body>
     <div class="wrapper">
+      <div class="background-image"></div>
       <div class="container">
         <div class="game-settings">
-          <div>
+          <div class="game-settings--difficulty">
             <label for="difficulty">Difficulty</label>
             <select name="difficulty" id="difficulty">
               <option value="1">Beginner</option>
@@ -21,10 +22,13 @@
             </select>
           </div>
           <div>
-              <button id="add-col">Add column</button>
-              <button id="remove-col">Remove column</button>
-              <button id="add-row">Add row</button>
-              <button id="remove-row">Remove row</button>
+              <button id="add-col" class="settings-button">Add column</button>
+              <button id="remove-col" class="settings-button">Remove column</button>
+              <button id="add-row" class="settings-button">Add row</button>
+              <button id="remove-row" class="settings-button">Remove row</button>
+          </div>
+          <div>
+            <button id="reset" class="settings-button">Reset</button>
           </div>
         </div>
         <div id="playfieldContainer">

@@ -2,6 +2,7 @@ document.getElementById('add-col').addEventListener('click', addCol);
 document.getElementById('remove-col').addEventListener('click', removeCol);
 document.getElementById('add-row').addEventListener('click', addRow);
 document.getElementById('remove-row').addEventListener('click', removeRow);
+document.getElementById('reset').addEventListener('click', drawPlayfield);
 document
   .getElementById('difficulty')
   .addEventListener('change', changeDifficulty);
